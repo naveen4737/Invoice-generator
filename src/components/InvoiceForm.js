@@ -8,6 +8,9 @@ import Card from 'react-bootstrap/Card';
 import InvoiceItem from './InvoiceItem';
 import InvoiceModal from './InvoiceModal';
 import InputGroup from 'react-bootstrap/InputGroup';
+import { connect } from "react-redux";
+import { addInvoice, deleteInvoice, editInvoice } from '../utils/invoiceSlice';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
 class InvoiceForm extends React.Component {
   constructor(props) {
@@ -42,6 +45,9 @@ class InvoiceForm extends React.Component {
       }
     ];
     this.editField = this.editField.bind(this);
+    if(this.props.currentEdit!=null) {
+      this.state = JSON.parse(JSON.stringify(this.props.invoices[this.props.currentEdit]));
+    }
   }
   componentDidMount(prevProps) {
     this.handleCalculateTotal()
@@ -88,6 +94,14 @@ class InvoiceForm extends React.Component {
     });
 
   };
+  handleAddInvoice() {
+    const newInvoice = this.state;
+    this.props.addInvoice(newInvoice);
+  };
+  handleUpdateInvoice() {
+    const newInvoice = this.state;
+    this.props.editInvoice({index: this.props.currentEdit, invoice: newInvoice});
+  };
   onItemizedItemEdit(evt) {
     var item = {
       id: evt.target.id,
@@ -126,6 +140,7 @@ class InvoiceForm extends React.Component {
       <Row>
         <Col md={8} lg={9}>
           <Card className="p-4 p-xl-5 my-3 my-xl-4">
+            {this.props.editing && <h3>Editing Invoice: {this.props.currentEdit}</h3>}
             <div className="d-flex flex-row align-items-start justify-content-between mb-3">
               <div class="d-flex flex-column">
                 <div className="d-flex flex-column">
@@ -205,8 +220,11 @@ class InvoiceForm extends React.Component {
         </Col>
         <Col md={4} lg={3}>
           <div className="sticky-top pt-md-3 pt-xl-4">
-            <Button variant="primary" type="submit" className="d-block w-100">Review Invoice</Button>
-            <InvoiceModal showModal={this.state.isOpen} closeModal={this.closeModal} info={this.state} items={this.state.items} currency={this.state.currency} subTotal={this.state.subTotal} taxAmmount={this.state.taxAmmount} discountAmmount={this.state.discountAmmount} total={this.state.total}/>
+            <Button variant="primary" type="submit" className="d-block w-100">Review & {this.props.editing? "Edit": "Submit"} Invoice</Button>
+            <Link to="/">
+              <Button variant="success" className="d-block w-100 mt-3">View Invoices</Button>
+            </Link>
+            <InvoiceModal showModal={this.state.isOpen} closeModal={this.closeModal} info={this.state} items={this.state.items} currency={this.state.currency} subTotal={this.state.subTotal} taxAmmount={this.state.taxAmmount} discountAmmount={this.state.discountAmmount} total={this.state.total} submitText={this.props.editing? "Update": "Submit"} submitCallback={this.props.editing? ()=>this.handleUpdateInvoice(): () => this.handleAddInvoice()} />
             <Form.Group className="mb-3">
               <Form.Label className="fw-bold">Currency:</Form.Label>
               <Form.Select onChange={event => this.onCurrencyChange({currency: event.target.value})} className="btn btn-light my-1" aria-label="Change Currency">
@@ -245,4 +263,17 @@ class InvoiceForm extends React.Component {
   }
 }
 
-export default InvoiceForm;
+const mapDispatchToProps = (dispatch) => ({
+  addInvoice: (invoice) => dispatch(addInvoice(invoice)),
+  deleteInvoice: () => dispatch(deleteInvoice()),
+  editInvoice: (invoice) => dispatch(editInvoice(invoice)),
+});
+
+const mapStateToProps = (props) => ({
+  invoices: props.invoice.invoices,
+  currentEdit: props.invoice.currentEdit,
+  editing: props.invoice.editing
+});
+
+// export default InvoiceForm;
+export default connect(mapStateToProps, mapDispatchToProps)(InvoiceForm);

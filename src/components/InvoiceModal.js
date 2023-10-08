@@ -104,14 +104,14 @@ class InvoiceModal extends React.Component {
                     <td className="fw-bold" style={{width: '100px'}}>SUBTOTAL</td>
                     <td className="text-end" style={{width: '100px'}}>{this.props.currency} {this.props.subTotal}</td>
                   </tr>
-                  {this.props.taxAmmount != 0.00 &&
+                  {this.props.taxAmmount !== 0.00 &&
                     <tr className="text-end">
                       <td></td>
                       <td className="fw-bold" style={{width: '100px'}}>TAX</td>
                       <td className="text-end" style={{width: '100px'}}>{this.props.currency} {this.props.taxAmmount}</td>
                     </tr>
                   }
-                  {this.props.discountAmmount != 0.00 &&
+                  {this.props.discountAmmount !== 0.00 &&
                     <tr className="text-end">
                       <td></td>
                       <td className="fw-bold" style={{width: '100px'}}>DISCOUNT</td>
@@ -144,6 +144,11 @@ class InvoiceModal extends React.Component {
                   Download Copy
                 </Button>
               </Col>
+              {this.props.submitText && this.props.submitCallback && <Col md={6} className="mt-1">
+                <Button variant="outline-primary" className="d-block w-100 mt-3 mt-md-0" onClick={this.props.submitCallback}>
+                  {this.props.submitText}
+                </Button>
+              </Col>}
             </Row>
           </div>
         </Modal>
