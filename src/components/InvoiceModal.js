@@ -144,6 +144,7 @@ class InvoiceModal extends React.Component {
                   Download Copy
                 </Button>
               </Col>
+              {/* Adding a new button in modal (Update/Submit) */}
               {this.props.submitText && this.props.submitCallback && <Col md={6} className="mt-1">
                 <Button variant="outline-primary" className="d-block w-100 mt-3 mt-md-0" onClick={this.props.submitCallback}>
                   {this.props.submitText}

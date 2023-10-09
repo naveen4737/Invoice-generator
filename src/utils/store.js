@@ -3,7 +3,7 @@ import invoiceReducer from "./invoiceSlice";
 
 const store = configureStore({
   reducer: {
-    invoice: invoiceReducer,
+    invoice: invoiceReducer, // making an invoice slice
   }
 });
 
