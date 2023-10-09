@@ -31,10 +31,10 @@ const InvoiceList = () => {
         </Button>
       </div>
       <div className="invoice-list pt-md-3">
-        <h3>Invoices</h3>
+        <h3>{invoices.length==0? "No Invoices to show": "Invoices"}</h3>
         {invoices.map((invoice, index)=>{
           return (<>
-            <Card style={{ width: '100%' }} key={index}>
+            <Card key={index} className="w-100 mt-2">
               <Card.Body>
                 <Card.Title>Bill to: {invoice.billTo}</Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">Bill from: {invoice.billFrom}</Card.Subtitle>
@@ -68,8 +68,6 @@ const InvoiceList = () => {
 
               </Card.Body>
             </Card>
-
-            <hr/>
           </>)
         })}
         

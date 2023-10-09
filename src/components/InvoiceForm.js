@@ -47,6 +47,7 @@ class InvoiceForm extends React.Component {
     this.editField = this.editField.bind(this);
     if(this.props.currentEdit!=null) {
       this.state = JSON.parse(JSON.stringify(this.props.invoices[this.props.currentEdit]));
+      this.state.isOpen = false;
     }
   }
   componentDidMount(prevProps) {
@@ -97,10 +98,12 @@ class InvoiceForm extends React.Component {
   handleAddInvoice() {
     const newInvoice = this.state;
     this.props.addInvoice(newInvoice);
+    this.closeModal();
   };
   handleUpdateInvoice() {
     const newInvoice = this.state;
     this.props.editInvoice({index: this.props.currentEdit, invoice: newInvoice});
+    this.closeModal();
   };
   onItemizedItemEdit(evt) {
     var item = {
